@@ -10,28 +10,30 @@ import {
 } from "@/components/mui";
 import { useTheme } from "@mui/material/styles";
 import { Flipper, Flipped } from "react-flip-toolkit";
+import { CreateForm } from "./create-form";
 
 export const Attendances = () => {
   const theme = useTheme();
 
   // データとグループ数の設定
   const [data, setData] = useState(
-    Array.from({ length: 12 }, (_, i) => ({ id: i + 1, value: "" }))
+    Array.from({ length: 30 }, (_, i) => ({ id: i + 1, value: "" }))
   );
-  const groupCount = 3;
+  const groupCount = 6;
 
   const shuffleData = () => {
     setData((prev) => [...prev].sort(() => Math.random() - 0.5));
   };
 
-  const handleInputChange = (id, newValue) => {
+  const handleInputChange = (id: number, newValue: string) => {
     setData((prev) =>
       prev.map((item) => (item.id === id ? { ...item, value: newValue } : item))
     );
   };
 
+
   // 各グループに均等にデータを配分するための処理
-  const getGroupData = (groupIndex) => {
+  const getGroupData = (groupIndex: number) => {
     const itemsPerGroup = Math.floor(data.length / groupCount);
     const remainder = data.length % groupCount;
     const startIndex =
@@ -42,12 +44,15 @@ export const Attendances = () => {
   };
 
   return (
-    <MuiStack direction="row" flexWrap="wrap" spacing={2}>
+    <MuiStack direction="row" flexWrap="wrap" spacing={2} width={`calc(100% - 70px)`}>
       <Flipper flipKey={data.map((item) => item.id).join("")}>
         <button onClick={shuffleData}>Shuffle</button>
         <button onClick={() => setData((prev) => [...prev].reverse())}>
           Reverse
         </button>
+
+        <button onClick={() => { }}>条件開く</button>
+
         <MuiGrid container spacing={2}>
           {Array.from({ length: groupCount }).map((_, groupIndex) => (
             <MuiGrid key={groupIndex} size={4}>

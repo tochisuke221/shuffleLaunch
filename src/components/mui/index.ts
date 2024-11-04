@@ -1,4 +1,6 @@
 export type { MuiOutlinedInputProps } from "./outlined-input";
+export type { MuiDrawerProps } from "./drawer";
+export type { MuiSwipeableDrawerProps } from "./swipeable-drawer";
 
 export { MuiBox } from "./box";
 export { MuiCard } from "./card";
@@ -9,3 +11,4 @@ export { MuiStack } from "./stack";
 export { MuiOutlinedInput } from "./outlined-input";
 export { MuiTypography } from "./typography";
 export { MuiGrid } from "./grid";
+export { MuiDrawer } from "./drawer";
