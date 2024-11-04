@@ -2,8 +2,17 @@
 
 import { useTheme } from "@mui/material/styles";
 import { useState } from "react";
-import { MuiDrawer, MuiBox, MuiTypography } from "@/components/mui";
-
+import {
+  MuiAccordion,
+  MuiAccordionSummary,
+  MuiAccordionDetails,
+  MuiAccordionActions,
+  MuiStack,
+  MuiDrawer,
+  MuiBox,
+  MuiTypography,
+} from "@/components/mui";
+import { AttendanceIcon, ExpandMoreIcon, SearchIcon } from "@/components/icons";
 
 const drawerWidth = "50%";
 const closedDrawerWidth = 70;
@@ -50,15 +59,59 @@ export const CreateForm = () => {
           },
         }}
       >
-        {/* ドロワーのコンテンツ */}
         <MuiBox
           sx={{
             height: "100%",
             p: 2,
-            backgroundColor: theme.palette.common.white,
+            backgroundColor: theme.palette.common.grayLight,
           }}
         >
-          <MuiTypography variant="h6">条件を入力してください</MuiTypography>
+          {open ? (
+            <MuiStack spacing={3}>
+              <MuiStack direction="row" alignItems="center" spacing={1} py={2}>
+                <SearchIcon />
+                <MuiTypography variant="h4">
+                  条件
+                </MuiTypography>
+              </MuiStack>
+              <MuiStack spacing={3}>
+                <MuiAccordion>
+                  <MuiAccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <MuiStack direction="row" spacing={2}>
+                      <AttendanceIcon />
+                      <MuiTypography>グループ数と人数を設定する</MuiTypography>
+                    </MuiStack>
+                  </MuiAccordionSummary>
+                  <MuiAccordionDetails></MuiAccordionDetails>
+                </MuiAccordion>
+
+                <MuiAccordion>
+                  <MuiAccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <MuiStack direction="row" spacing={2}>
+                      <AttendanceIcon />
+                      <MuiTypography>グループ数と人数を設定する</MuiTypography>
+                    </MuiStack>
+                  </MuiAccordionSummary>
+                  <MuiAccordionDetails></MuiAccordionDetails>
+                </MuiAccordion>
+
+                <MuiAccordion>
+                  <MuiAccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <MuiStack direction="row" spacing={2}>
+                      <AttendanceIcon />
+                      <MuiTypography>グループ数と人数を設定する</MuiTypography>
+                    </MuiStack>
+                  </MuiAccordionSummary>
+                  <MuiAccordionDetails></MuiAccordionDetails>
+                </MuiAccordion>
+              </MuiStack>
+            </MuiStack>
+          ) : (
+            <MuiStack direction="row" alignItems="center" spacing={1}>
+              <SearchIcon />
+            </MuiStack>
+          )}
+
           <button onClick={toggleDrawer}>{open ? "閉じる" : "開く"}</button>
         </MuiBox>
       </MuiDrawer>
