@@ -23,7 +23,7 @@ const AttendanceContext = createContext<AttendanceContext>({
   },
   inputAttendance() {
     throw new Error("missing method");
-  }
+  },
 });
 
 type Props = {
@@ -44,13 +44,29 @@ export const AttendanceProvider = ({ children }: Props) => {
     }))
   );
 
+  // NOTE: 一旦、グループ数やグループあたりの人数が変更された場合はうしろに新しいフォームを追加する
   useEffect(() => {
-    setAttendances(
-      Array.from({ length: groupAttendanceCount * groupCount }, (_, i) => ({
-        id: i + 1,
-        name: "",
-      }))
-    );
+    setAttendances((prev) => {
+      const newLength = groupAttendanceCount * groupCount;
+
+      if (prev.length === newLength) return prev;
+
+      if (prev.length > newLength) {
+        // 長さが新しい長さよりも多い場合は短縮
+        return prev.slice(0, newLength);
+      }
+
+      // 長さが新しい長さよりも少ない場合は追加
+      const additionalItems = Array.from(
+        { length: newLength - prev.length },
+        (_, i) => ({
+          id: prev.length + i + 1,
+          name: "",
+        })
+      );
+
+      return [...prev, ...additionalItems];
+    });
   }, [groupCount, groupAttendanceCount]);
 
   const handleShuffleAttendances = () => {
@@ -59,7 +75,9 @@ export const AttendanceProvider = ({ children }: Props) => {
 
   const handleInputAttendance = (id: number, name: string) => {
     setAttendances((prev) =>
-      prev.map((attendance) => (attendance.id === id ? { ...attendance, name: name } : attendance))
+      prev.map((attendance) =>
+        attendance.id === id ? { ...attendance, name: name } : attendance
+      )
     );
   };
 

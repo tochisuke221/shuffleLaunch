@@ -15,35 +15,41 @@ import {
   MuiDrawer,
   MuiBox,
   MuiTypography,
+  MuiIconButton,
 } from "@/components/mui";
 import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
   AttendanceAddIcon,
   AttendanceIcon,
   ExpandMoreIcon,
   SearchIcon,
 } from "@/components/icons";
 import { GroupIcon } from "@/components/icons";
-import { useCreateForm } from "../hooks/create-form";
 import { useGroupContext } from "../providers/group";
+import { useCreateForm } from "../hooks/create-form";
+import { ArrowLeft } from "@mui/icons-material";
 
 const drawerWidth = "50%";
 const closedDrawerWidth = 70;
 
 export const CreateForm = () => {
   const theme = useTheme();
-  const [open, setOpen] = useState(false);
 
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
+  const {
+    groupCount,
+    groupAttendanceCount,
+    changeGroupCount: handleChangeGroupCount,
+    changeGroupAttendanceCount: handleChangeGroupAttendanceCount,
+  } = useGroupContext();
 
-  const { groupCount, groupAttendanceCount,  changeGroupCount: handleChangeGroupCount, changeGroupAttendanceCount: handleChangeGroupAttendanceCount } =
-      useGroupContext();
+  const { open, handleClickOpen, handleClickClose } = useCreateForm();
 
   return (
     <MuiBox>
       {/* トグルボタンをDrawerの外に配置 */}
-      <button onClick={toggleDrawer}>{open ? "閉じる" : "開く"}</button>
+      <button onClick={handleClickOpen}>{"開く"}</button>
+      <button onClick={handleClickClose}>{"閉じる"}</button>
 
       {/* ドロワー */}
       <MuiDrawer
@@ -83,9 +89,19 @@ export const CreateForm = () => {
         >
           {open ? (
             <MuiStack spacing={3}>
-              <MuiStack direction="row" alignItems="center" spacing={1} py={2}>
-                <SearchIcon />
-                <MuiTypography variant="h4">条件</MuiTypography>
+              <MuiStack direction="row" justifyContent="space-between">
+                <MuiStack
+                  direction="row"
+                  alignItems="center"
+                  spacing={1}
+                  py={2}
+                >
+                  <SearchIcon />
+                  <MuiTypography variant="h4">条件</MuiTypography>
+                </MuiStack>
+                <MuiIconButton onClick={handleClickClose}>
+                  <ArrowRightIcon />
+                </MuiIconButton>
               </MuiStack>
               <MuiStack spacing={3}>
                 <MuiAccordion>
@@ -181,12 +197,12 @@ export const CreateForm = () => {
               </MuiStack>
             </MuiStack>
           ) : (
-            <MuiStack direction="row" alignItems="center" spacing={1}>
-              <SearchIcon />
+            <MuiStack alignItems="center" spacing={1}>
+              <MuiIconButton onClick={handleClickOpen}>
+                <ArrowLeftIcon />
+              </MuiIconButton>
             </MuiStack>
           )}
-
-          <button onClick={toggleDrawer}>{open ? "閉じる" : "開く"}</button>
         </MuiBox>
       </MuiDrawer>
     </MuiBox>

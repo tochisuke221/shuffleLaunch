@@ -20,3 +20,4 @@ export { MuiMenuItem } from "./menu-item";
 export { MuiOutlinedInput } from "./outlined-input";
 export { MuiTypography } from "./typography";
 export { MuiGrid } from "./grid";
+export { MuiIconButton } from "./icon-button";
