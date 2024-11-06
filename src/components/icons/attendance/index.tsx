@@ -1,8 +1,8 @@
 "use client";
 
-import MuiPeopleIcon from "@mui/icons-material/People";
+import MuiGroupsIcon from "@mui/icons-material/Groups";
 import { SvgIconOwnProps } from "@mui/material/SvgIcon";
 
 export const AttendanceIcon = (props: SvgIconOwnProps) => (
-  <MuiPeopleIcon {...props} />
+  <MuiGroupsIcon {...props} />
 );

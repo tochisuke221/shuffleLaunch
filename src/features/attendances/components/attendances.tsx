@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { use, useState } from "react";
 import {
   MuiStack,
   MuiOutlinedInput,
@@ -11,47 +11,36 @@ import {
 import { useTheme } from "@mui/material/styles";
 import { Flipper, Flipped } from "react-flip-toolkit";
 import { CreateForm } from "./create-form";
+import { useGroupContext } from "../providers/group";
+import { useAttendanceContext } from "../providers/attendance";
 
 export const Attendances = () => {
   const theme = useTheme();
 
-  // データとグループ数の設定
-  const [data, setData] = useState(
-    Array.from({ length: 30 }, (_, i) => ({ id: i + 1, value: "" }))
-  );
-  const groupCount = 6;
-
-  const shuffleData = () => {
-    setData((prev) => [...prev].sort(() => Math.random() - 0.5));
-  };
-
-  const handleInputChange = (id: number, newValue: string) => {
-    setData((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, value: newValue } : item))
-    );
-  };
+  const { groupCount, groupAttendanceCount } = useGroupContext();
+  const { attendances, shuffleAttendances: handleShuffleAttendances, inputAttendance: handleInputAttendance } = useAttendanceContext();
 
 
   // 各グループに均等にデータを配分するための処理
   const getGroupData = (groupIndex: number) => {
-    const itemsPerGroup = Math.floor(data.length / groupCount);
-    const remainder = data.length % groupCount;
+    const itemsPerGroup = Math.floor(attendances.length / groupCount);
+    const remainder = attendances.length % groupCount;
     const startIndex =
       groupIndex * itemsPerGroup + Math.min(groupIndex, remainder);
     const endIndex =
       startIndex + itemsPerGroup + (groupIndex < remainder ? 1 : 0);
-    return data.slice(startIndex, endIndex);
+    return attendances.slice(startIndex, endIndex);
   };
 
   return (
-    <MuiStack direction="row" flexWrap="wrap" spacing={2} width={`calc(100% - 70px)`}>
-      <Flipper flipKey={data.map((item) => item.id).join("")}>
-        <button onClick={shuffleData}>Shuffle</button>
-        <button onClick={() => setData((prev) => [...prev].reverse())}>
-          Reverse
-        </button>
-
-        <button onClick={() => { }}>条件開く</button>
+    <MuiStack
+      direction="row"
+      flexWrap="wrap"
+      spacing={2}
+      width={`calc(100% - 70px)`}
+    >
+      <Flipper flipKey={attendances.map((attendance) => attendance.id).join("")}>
+        <button onClick={handleShuffleAttendances}>Shuffle</button>
 
         <MuiGrid container spacing={2}>
           {Array.from({ length: groupCount }).map((_, groupIndex) => (
@@ -83,12 +72,12 @@ export const Attendances = () => {
                       flexWrap="wrap"
                       width="100%"
                     >
-                      {getGroupData(groupIndex).map((item) => (
-                        <Flipped key={item.id} flipId={item.id}>
+                      {getGroupData(groupIndex).map((attendance) => (
+                        <Flipped key={attendance.id} flipId={attendance.id}>
                           <MuiOutlinedInput
-                            value={item.value}
+                            value={attendance.name}
                             onChange={(e) =>
-                              handleInputChange(item.id, e.target.value)
+                              handleInputAttendance(attendance.id, e.target.value)
                             }
                             sx={{
                               // TODO: あとで直す
