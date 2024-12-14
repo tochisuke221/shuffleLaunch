@@ -3,19 +3,47 @@
 import { useState } from "react";
 
 export const useCreateForm = () => {
-  const [open, setOpen] = useState<boolean>(false);
-
+  const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
+  const [accordionOpen, setAccordionOpen] = useState<Map<string, boolean>>(
+    new Map<string, boolean>([["group", false]])
+  );
   const handleClickOpen = () => {
-    setOpen(true);
+    setDrawerOpen(true);
   };
 
   const handleClickClose = () => {
-    setOpen(false);
+    setAccordionOpen((prev) => {
+      const newMap = new Map();
+
+      prev.forEach((_, mapKey) => {
+        newMap.set(mapKey, false);
+      });
+
+      return newMap;
+    });
+      
+    setDrawerOpen(false);
+  };
+
+  const handleClickShortcut = (key: string) => {
+    setAccordionOpen((prev) => {
+      const newMap = new Map();
+
+      prev.forEach((value, mapKey) => {
+        newMap.set(mapKey, mapKey === key);
+      });
+
+      return newMap;
+    });
+
+    setDrawerOpen(true);
   };
 
   return {
-    open,
+    drawerOpen,
+    accordionOpen,
     handleClickOpen,
     handleClickClose,
+    handleClickShortcut,
   };
 };

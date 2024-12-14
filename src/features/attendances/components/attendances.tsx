@@ -10,14 +10,13 @@ import {
 } from "@/components/mui";
 import { useTheme } from "@mui/material/styles";
 import { Flipper, Flipped } from "react-flip-toolkit";
-import { CreateForm } from "./create-form";
 import { useGroupContext } from "../providers/group";
 import { useAttendanceContext } from "../providers/attendance";
 
 export const Attendances = () => {
   const theme = useTheme();
 
-  const { groupCount, groupAttendanceCount } = useGroupContext();
+  const { groupCount } = useGroupContext();
   const { attendances, shuffleAttendances: handleShuffleAttendances, inputAttendance: handleInputAttendance } = useAttendanceContext();
 
 

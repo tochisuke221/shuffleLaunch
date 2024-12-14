@@ -24,11 +24,12 @@ import {
   AttendanceIcon,
   ExpandMoreIcon,
   SearchIcon,
+  ShuffleIcon,
 } from "@/components/icons";
 import { GroupIcon } from "@/components/icons";
 import { useGroupContext } from "../providers/group";
 import { useCreateForm } from "../hooks/create-form";
-import { ArrowLeft } from "@mui/icons-material";
+import { useAttendanceContext } from "../providers/attendance";
 
 const drawerWidth = "50%";
 const closedDrawerWidth = 70;
@@ -43,37 +44,41 @@ export const CreateForm = () => {
     changeGroupAttendanceCount: handleChangeGroupAttendanceCount,
   } = useGroupContext();
 
-  const { open, handleClickOpen, handleClickClose } = useCreateForm();
+  const { shuffleAttendances: handleShuffleAttendances } =
+    useAttendanceContext();
+
+  const {
+    drawerOpen,
+    accordionOpen,
+    handleClickOpen,
+    handleClickClose,
+    handleClickShortcut,
+  } = useCreateForm();
 
   return (
     <MuiBox>
-      {/* トグルボタンをDrawerの外に配置 */}
-      <button onClick={handleClickOpen}>{"開く"}</button>
-      <button onClick={handleClickClose}>{"閉じる"}</button>
-
-      {/* ドロワー */}
       <MuiDrawer
         variant="permanent"
         anchor="right"
-        open={open}
+        open={drawerOpen}
         sx={{
-          width: open ? drawerWidth : closedDrawerWidth,
+          width: drawerOpen ? drawerWidth : closedDrawerWidth,
           flexShrink: 0,
           whiteSpace: "nowrap",
           boxSizing: "border-box",
           overflowX: "hidden",
           transition: theme.transitions.create("width", {
             easing: theme.transitions.easing.sharp,
-            duration: open
+            duration: drawerOpen
               ? theme.transitions.duration.enteringScreen
               : theme.transitions.duration.leavingScreen,
           }),
           "& .MuiDrawer-paper": {
-            width: open ? drawerWidth : closedDrawerWidth,
+            width: drawerOpen ? drawerWidth : closedDrawerWidth,
             overflowX: "hidden",
             transition: theme.transitions.create("width", {
               easing: theme.transitions.easing.sharp,
-              duration: open
+              duration: drawerOpen
                 ? theme.transitions.duration.enteringScreen
                 : theme.transitions.duration.leavingScreen,
             }),
@@ -87,7 +92,7 @@ export const CreateForm = () => {
             backgroundColor: theme.palette.common.grayLight,
           }}
         >
-          {open ? (
+          {drawerOpen ? (
             <MuiStack spacing={3}>
               <MuiStack direction="row" justifyContent="space-between">
                 <MuiStack
@@ -100,11 +105,11 @@ export const CreateForm = () => {
                   <MuiTypography variant="h4">条件</MuiTypography>
                 </MuiStack>
                 <MuiIconButton onClick={handleClickClose}>
-                  <ArrowRightIcon />
+                  <ArrowRightIcon color="primary" fontSize="large" />
                 </MuiIconButton>
               </MuiStack>
               <MuiStack spacing={3}>
-                <MuiAccordion>
+                <MuiAccordion expanded={accordionOpen.get("group")}>
                   <MuiAccordionSummary expandIcon={<ExpandMoreIcon />}>
                     <MuiStack direction="row" spacing={2}>
                       <AttendanceIcon />
@@ -199,7 +204,23 @@ export const CreateForm = () => {
           ) : (
             <MuiStack alignItems="center" spacing={1}>
               <MuiIconButton onClick={handleClickOpen}>
-                <ArrowLeftIcon />
+                <ArrowLeftIcon color="primary" fontSize="large" />
+              </MuiIconButton>
+              <MuiIconButton onClick={() => handleClickShortcut("group")}>
+                <AttendanceIcon />
+              </MuiIconButton>
+              <MuiIconButton
+                onClick={() => handleShuffleAttendances()}
+                sx={{
+                    backgroundColor: theme.palette.common.red,
+                    borderRadius: 2,
+                    '&:hover': {
+                        backgroundColor: theme.palette.common.redLight,
+
+                    }
+                }}
+              >
+                <ShuffleIcon fontSize="large"  />
               </MuiIconButton>
             </MuiStack>
           )}
